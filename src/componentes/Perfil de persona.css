@@ -1,0 +1,147 @@
+.perfilDePersona {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  padding-inline: 12px;
+  text-align: center;
+}
+
+.perfilDePersona > .retratoDePersona {
+  margin: 8px 0 28px;
+  transition: transform 200ms ease;
+}
+
+.identidadDePersona {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.identidadDePersona h3 {
+  margin: 0;
+  color: var(--texto);
+  font-size: 1.625rem;
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
+}
+
+.apodoDePersona {
+  margin: 8px 0 0;
+  color: var(--acento);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.estudiosDePersona {
+  display: grid;
+  gap: 3px;
+  margin: 14px 0 0;
+  color: var(--textoSecundario);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.accionDePersona {
+  margin-top: auto;
+  padding-top: 20px;
+}
+
+.botonDePerfil {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 1px solid #68523c;
+  border-radius: 24px;
+  background: #211a14;
+  color: var(--texto);
+  cursor: pointer;
+  font-size: 0.8125rem;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.botonDePerfil svg {
+  flex-shrink: 0;
+  transition: transform 160ms ease;
+}
+
+@media (hover: hover) {
+  .botonDePerfil:hover {
+    border-color: var(--acento);
+    background: var(--acento);
+    color: var(--tierra);
+  }
+
+  .botonDePerfil:hover svg {
+    transform: translate(2px, -2px);
+  }
+
+  .perfilDePersona:has(.botonDePerfil:hover) > .retratoDePersona {
+    transform: translateY(-4px);
+  }
+}
+
+.botonDePerfil:active {
+  background: #bfa079;
+  color: var(--tierra);
+}
+
+@media (max-width: 599px) {
+  .perfilDePersona {
+    --tamanoRetrato: 84px;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 24px;
+    padding-inline: 8px;
+    text-align: left;
+  }
+
+  .perfilDePersona > .retratoDePersona {
+    margin: 8px 0 0;
+  }
+
+  .identidadDePersona {
+    align-items: flex-start;
+    padding-top: 4px;
+  }
+
+  .identidadDePersona h3 {
+    font-size: 1.3125rem;
+  }
+
+  .apodoDePersona {
+    font-size: 0.875rem;
+  }
+
+  .estudiosDePersona {
+    margin-top: 10px;
+    font-size: 0.8125rem;
+  }
+
+  .accionDePersona {
+    padding-top: 14px;
+  }
+
+  .botonDePerfil {
+    padding-inline: 14px;
+  }
+}
+
+@media (max-width: 359px) {
+  .perfilDePersona {
+    --tamanoRetrato: 68px;
+    gap: 20px;
+    padding-inline: 4px;
+  }
+}

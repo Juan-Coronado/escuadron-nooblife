@@ -1,0 +1,47 @@
+.retratoDePersona {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--tamanoRetrato, 148px);
+  aspect-ratio: 1;
+  flex-shrink: 0;
+  overflow: hidden;
+  outline: 1px solid #7f674c;
+  outline-offset: 8px;
+  border-radius: 50%;
+  background: #d6b68f;
+  color: #35271d;
+  font-size: calc(var(--tamanoRetrato, 148px) * 0.36);
+  font-weight: 600;
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+.retratoDePersona[data-tono='1'] {
+  background: #e5d7c0;
+}
+
+.retratoDePersona[data-tono='2'] {
+  background: #bfa48e;
+}
+
+.retratoDePersona[data-sin-foto]::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  background: url('/images/fondo-textura.png') center / cover;
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+.retratoDePersona > span {
+  position: relative;
+  z-index: 1;
+}
+
+.retratoDePersona img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

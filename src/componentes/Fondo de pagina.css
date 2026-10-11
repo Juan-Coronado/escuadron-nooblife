@@ -1,0 +1,24 @@
+.fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.fondo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.fondo::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  background:
+    radial-gradient(ellipse at 25% 20%, rgb(156 111 61 / 10%), transparent 55%),
+    linear-gradient(180deg, rgb(8 6 4 / 50%), rgb(8 6 4 / 76%) 60%, rgb(8 6 4 / 70%));
+}

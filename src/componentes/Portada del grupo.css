@@ -1,0 +1,148 @@
+.portadaDelGrupo {
+  margin-bottom: 36px;
+}
+
+.composicionDePortada {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(40px, 5vw, 88px);
+  padding: 36px 16px 20px;
+}
+
+.marcaDelGrupo {
+  min-width: 0;
+}
+
+.etiquetaDePortada {
+  margin: 0 0 12px;
+  color: var(--acento);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.nombreDelGrupo {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2169 / 565;
+  margin: 0;
+  font-size: inherit;
+  line-height: 1;
+}
+
+.imagenDePortada {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: auto;
+  transform: translateY(-51%);
+  filter: drop-shadow(0 6px 10px rgb(0 0 0 / 36%));
+}
+
+.introduccionDelGrupo {
+  min-width: 0;
+  max-width: 520px;
+}
+
+.introduccionDelGrupo h2 {
+  margin: 0;
+  font-size: clamp(2.25rem, 3.5vw, 3.75rem);
+  font-weight: 500;
+  line-height: 1.04;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+.introduccionDelGrupo h2 span {
+  color: var(--acento);
+}
+
+.introduccionDelGrupo > p {
+  max-width: 38ch;
+  margin: 22px 0 0;
+  color: var(--textoSecundario);
+  font-size: 1rem;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.explorarElGrupo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  min-height: 52px;
+  margin-top: 28px;
+  padding: 12px 24px;
+  border: 1px solid var(--acento);
+  border-radius: 32px;
+  background: var(--acento);
+  color: var(--tierra);
+  text-decoration: none;
+  font-size: 0.9375rem;
+  transition: background-color 160ms ease;
+}
+
+.explorarElGrupo:hover {
+  background: #f0d5b0;
+}
+
+.explorarElGrupo svg {
+  flex-shrink: 0;
+}
+
+@media (max-width: 999px) {
+  .composicionDePortada {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 32px;
+    padding-inline: 0;
+  }
+
+  .introduccionDelGrupo h2 {
+    font-size: 2.25rem;
+  }
+}
+
+@media (max-width: 749px) {
+  .composicionDePortada {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+    padding-top: 36px;
+    padding-bottom: 8px;
+  }
+
+  .marcaDelGrupo {
+    max-width: 560px;
+  }
+
+  .introduccionDelGrupo h2 {
+    font-size: clamp(2.25rem, 6vw, 3rem);
+  }
+}
+
+@media (max-width: 599px) {
+  .portadaDelGrupo {
+    margin-bottom: 28px;
+  }
+
+  .composicionDePortada {
+    gap: 24px;
+    padding-top: 20px;
+  }
+
+  .introduccionDelGrupo h2 {
+    font-size: 2rem;
+  }
+
+  .introduccionDelGrupo > p {
+    margin-top: 14px;
+    font-size: 0.9375rem;
+  }
+
+  .explorarElGrupo {
+    margin-top: 16px;
+    min-height: 48px;
+  }
+}

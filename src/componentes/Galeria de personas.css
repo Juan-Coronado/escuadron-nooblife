@@ -1,0 +1,212 @@
+.presentaciones {
+  padding: 32px;
+  scroll-margin-top: 24px;
+  border: 1px solid rgb(224 189 144 / 15%);
+  border-radius: 40px;
+  background: #14110df2;
+}
+
+.herramientasDelGrupo {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgb(224 189 144 / 18%);
+}
+
+.etiquetaDeSeccion {
+  margin: 0 0 10px;
+  color: var(--acento);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.tituloDelGrupo {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+}
+
+.tituloDelGrupo h2 {
+  margin: 0;
+  font-size: clamp(1.875rem, 3vw, 2.75rem);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.045em;
+}
+
+.tituloDelGrupo p {
+  margin: 0;
+  color: var(--textoSecundario);
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.buscadorDePersonas {
+  width: 340px;
+  max-width: 100%;
+}
+
+.buscadorDePersonas label {
+  display: block;
+  margin: 0 0 8px 16px;
+  color: var(--textoSecundario);
+  font-size: 0.8125rem;
+}
+
+.campoDeBusqueda {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding-left: 16px;
+  padding-right: 4px;
+  border: 1px solid #74604b;
+  border-radius: 28px;
+  background: #201a14;
+  color: var(--acento);
+}
+
+.campoDeBusqueda:focus-within {
+  outline: 2px solid var(--acento);
+  outline-offset: 3px;
+}
+
+.campoDeBusqueda > svg {
+  flex-shrink: 0;
+}
+
+.campoDeBusqueda input {
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--texto);
+  font-size: 0.9375rem;
+}
+
+.campoDeBusqueda input::placeholder {
+  color: var(--textoSecundario);
+  opacity: 1;
+}
+
+.campoDeBusqueda input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.campoDeBusqueda button {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--texto);
+  cursor: pointer;
+}
+
+.campoDeBusqueda button:hover {
+  background: rgb(232 208 177 / 13%);
+}
+
+.galeriaDePersonas {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 32px;
+  row-gap: 56px;
+  padding: 32px 0 8px;
+}
+
+.avisoDeDatos {
+  margin: 20px 0 0;
+  color: var(--textoSecundario);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.resultadoVacio {
+  padding: 64px 0;
+  text-align: center;
+}
+
+.resultadoVacio h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.resultadoVacio p {
+  color: var(--textoSecundario);
+}
+
+.resultadoVacio button {
+  min-height: 44px;
+  margin-top: 8px;
+  padding: 10px 20px;
+  border: 0;
+  border-radius: 24px;
+  background: var(--acento);
+  color: var(--tierra);
+  cursor: pointer;
+}
+
+@media (min-width: 1400px) {
+  .galeriaDePersonas {
+    --tamanoRetrato: clamp(148px, 9vw, 168px);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 999px) {
+  .presentaciones {
+    padding: 32px;
+    border-radius: 32px;
+  }
+
+  .galeriaDePersonas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 24px;
+  }
+
+  .tituloDelGrupo {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 599px) {
+  .presentaciones {
+    padding: 24px 18px;
+    border-radius: 28px;
+  }
+
+  .herramientasDelGrupo {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .tituloDelGrupo {
+    align-items: baseline;
+    flex-direction: row;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .buscadorDePersonas {
+    width: 100%;
+  }
+
+  .galeriaDePersonas {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 32px;
+    padding-top: 32px;
+  }
+}

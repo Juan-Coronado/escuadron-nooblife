@@ -1,0 +1,48 @@
+import { expect, test } from '@playwright/test'
+import { personas } from '../src/datos/Personas'
+import { respuestaDeHoja, rutaDeHoja } from './Respuesta de hoja'
+
+test('gallery keeps basic identity and LinkedIn follows its person through updates in the full profile', async ({ page }) => {
+  await page.clock.install()
+  let registros = personas.map(persona => persona.apellidos === 'Ccana' ? {
+    ...persona, linkedin: 'https://www.linkedin.com/in/prueba-ccana/?isSelfProfile=true',
+  } : persona.apellidos === 'Quispe' ? { ...persona, linkedin: 'https://www.linkedin.com.ejemplo.test/in/otro/' } : persona)
+  await page.route(rutaDeHoja, route => route.fulfill({ contentType: 'application/javascript', body: respuestaDeHoja(registros) }))
+  await page.goto('/prueba-pages/')
+  const search = page.getByRole('searchbox', { name: 'Encuentra a alguien' })
+  await search.fill('Joseph')
+  const ccana = page.getByRole('article', { name: 'Presentación de Joseph Ccana', exact: true })
+  const registro = personas.find(persona => persona.apellidos === 'Ccana')!
+  await expect(ccana.getByRole('heading')).toHaveText('Joseph Ccana')
+  await expect(ccana.getByText(registro.apodos, { exact: true })).toBeVisible()
+  await expect(ccana.getByText(registro.institucion, { exact: true })).toBeVisible()
+  await expect(ccana.getByText(registro.carreras, { exact: true })).toBeVisible()
+  await expect(page.getByRole('article').getByText('Hobbies', { exact: true })).toHaveCount(0)
+  await expect(page.getByRole('article').getByText('Metas', { exact: true })).toHaveCount(0)
+  await expect(page.getByRole('article').getByText('LinkedIn', { exact: true })).toHaveCount(0)
+  await ccana.getByRole('button').click()
+  const perfil = page.getByRole('dialog', { name: 'Joseph Ccana', exact: true })
+  await expect(perfil.getByRole('heading', { name: 'Hobbies', exact: true })).toBeVisible()
+  await expect(perfil.getByRole('heading', { name: 'Metas', exact: true })).toBeVisible()
+  const linkedin = perfil.getByRole('link', { name: 'Ver LinkedIn de Joseph Ccana (abre en otra pestaña)', exact: true })
+  await expect(linkedin).toHaveAttribute('href', 'https://www.linkedin.com/in/prueba-ccana/?isSelfProfile=true')
+  await expect(linkedin).toHaveAttribute('target', '_blank')
+  await expect(linkedin).toHaveAttribute('rel', 'noopener noreferrer')
+  await linkedin.focus()
+  registros = registros.map(persona => persona.apellidos === 'Ccana' ? { ...persona, linkedin: 'https://es.linkedin.com/in/perfil-actualizado/' } : persona)
+  await page.clock.fastForward(60000)
+  await expect(linkedin).toHaveAttribute('href', 'https://es.linkedin.com/in/perfil-actualizado/')
+  await expect(linkedin).toBeFocused()
+  await page.getByRole('button', { name: 'Cerrar perfil' }).focus()
+  await page.keyboard.press('Shift+Tab')
+  await expect(linkedin).toBeFocused()
+  registros = registros.map(persona => persona.apellidos === 'Ccana' ? { ...persona, linkedin: '' } : persona)
+  await page.clock.fastForward(60000)
+  await expect(perfil.getByText('LinkedIn', { exact: true })).toHaveCount(0)
+  await page.keyboard.press('Escape')
+  await expect(ccana.getByRole('button')).toBeFocused()
+  await page.getByRole('button', { name: 'Ver perfil de Joseph Quispe', exact: true }).click()
+  const quispe = page.getByRole('dialog', { name: 'Joseph Quispe', exact: true })
+  await expect(quispe.getByText('https://www.linkedin.com.ejemplo.test/in/otro/', { exact: true })).toBeVisible()
+  await expect(quispe.getByRole('link', { name: /LinkedIn/ })).toHaveCount(0)
+})

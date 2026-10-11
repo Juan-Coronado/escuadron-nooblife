@@ -1,0 +1,55 @@
+.pagina {
+  position: relative;
+  z-index: 1;
+  min-height: 100svh;
+  max-width: 1920px;
+  margin-inline: auto;
+  padding: 24px clamp(32px, 4vw, 80px) 32px;
+}
+
+.pieDelGrupo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 32px;
+  padding-inline: 8px;
+  color: var(--textoSecundario);
+  font-size: 0.8125rem;
+}
+
+.pieDelGrupo p {
+  margin: 0;
+}
+
+.pieDelGrupo a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  color: var(--texto);
+  text-decoration: none;
+}
+
+.pieDelGrupo a:hover {
+  color: var(--acento);
+}
+
+@media (max-width: 999px) {
+  .pagina {
+    padding: 20px 32px 24px;
+  }
+}
+
+@media (max-width: 599px) {
+  .pagina {
+    padding: 16px 20px 24px;
+  }
+}
+
+@media (max-width: 359px) {
+  .pagina {
+    padding-inline: 16px;
+  }
+}
