@@ -51,4 +51,4 @@ Lighthouse de la revisión visual anterior: accesibilidad 100 y buenas práctica
 
 Traza de la revisión visual anterior: LCP observado de 117 ms y CLS 0, sin limitación de CPU ni red. Esta medición no representa visitas en GitHub Pages ni conexiones móviles. No hay datos de usuarios reales.
 
-Vista de avance: `http://127.0.0.1:5173/`. La página todavía no está publicada.
+Vista de avance: `http://127.0.0.1:5173/`. Web publicada en [GitHub Pages](https://juan-coronado.github.io/escuadron-nooblife/). El 11 de octubre de 2026 se verificaron las 17 presentaciones, la búsqueda, los perfiles y la foto real de Juan Coronado desde el dominio público, conservando el diseño y las rutas de los recursos. El flujo de publicación también superó las 32 pruebas en GitHub Actions.

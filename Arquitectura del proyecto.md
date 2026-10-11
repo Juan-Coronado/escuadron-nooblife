@@ -25,7 +25,7 @@ Web estática de presentación con React, TypeScript y Vite, destinada a GitHub 
 | `public/images/` | Fondo original, portada de referencia, marca transparente y futuras fotos. |
 | `public/fonts/` | Fuente local y su licencia. |
 | `tests/` | Pruebas funcionales de la compilación desde una subcarpeta. |
-| `.github/workflows/` | Compilación y futura publicación con GitHub Actions. |
+| `.github/workflows/` | Comprobaciones, compilación y publicación automática con GitHub Actions. |
 
 Cada componente visual tiene su CSS asociado. La entrada no contiene presentación ni reglas de diseño. Los estados de búsqueda y selección pertenecen a la galería; no requieren una dependencia de estado global ni un servicio.
 
@@ -64,3 +64,9 @@ Los nombres visibles y los nombres propios de archivos o carpetas con varias pal
 `npm run check` ejecuta lint, tipos, compilación, dos pruebas del servicio con un entorno simulado y 30 pruebas de navegador: diez casos en cada tamaño de escritorio, tablet y móvil. Incluyen búsqueda, navegación, fidelidad de datos y recursos, control del diálogo, orden alfabético, altas y bajas, recuperación de la hoja y actualización del perfil sin perder el foco. También verifican hobbies y metas dentro del perfil, fotos por persona, renovación, error y eliminación del retrato, así como asociación, actualización, retirada y validación de LinkedIn. El caso de Drive comprueba archivos por fila, conservación de la clave de acceso, renovación en el perfil abierto y rechazo de carpetas. Las consultas se interceptan con respuestas controladas; la lectura pública y el servicio real se verifican aparte.
 
 El servidor de desarrollo sigue en `http://127.0.0.1:5173/` y actualiza la vista al guardar. Los archivos de trabajo, capturas, informes y copias previas permanecen fuera de la publicación mediante `.gitignore`.
+
+## Publicación
+
+La web está publicada en [GitHub Pages](https://juan-coronado.github.io/escuadron-nooblife/) desde [Juan-Coronado/escuadron-nooblife](https://github.com/Juan-Coronado/escuadron-nooblife), rama `main`. El flujo utiliza Node.js 24, versiones fijadas de las acciones y permisos de escritura de Pages limitados al trabajo de despliegue. Publica únicamente `dist/` después de superar lint, tipos, compilación y las 32 pruebas. No necesita un servidor local ni claves en el navegador.
+
+El 11 de octubre de 2026 se verificaron el despliegue, los 17 perfiles y la lectura real de Google Sheets desde el dominio público, incluida la foto de Juan Coronado a 800 × 800 píxeles. Las actualizaciones de datos conservan el intervalo de 60 segundos y no requieren commits. Los cambios del código se publican con push a `main`.

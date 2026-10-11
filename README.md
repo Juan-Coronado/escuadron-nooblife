@@ -73,4 +73,10 @@ Bricolage Grotesque se sirve desde `public/fonts/`, con su licencia SIL Open Fon
 
 ## GitHub Pages
 
-Vite usa rutas relativas (`base: './'`). El flujo `.github/workflows/pages.yml` está preparado para compilar y desplegar al publicar la rama `main` en un repositorio con Pages configurado para GitHub Actions. La página todavía no está publicada.
+Web publicada: [Escuadrón Nooblife](https://juan-coronado.github.io/escuadron-nooblife/).
+
+Repositorio: [Juan-Coronado/escuadron-nooblife](https://github.com/Juan-Coronado/escuadron-nooblife), rama `main`. Pages utiliza GitHub Actions y HTTPS. Vite conserva las rutas relativas (`base: './'`). El flujo `.github/workflows/pages.yml` instala las dependencias, comprueba lint y tipos, compila, ejecuta las dos pruebas de integración y las 30 pruebas de navegador, y publica `dist/` solo si las comprobaciones pasan. También puede ejecutarse manualmente desde Actions.
+
+Las ediciones del diseño o del código se publican con un commit y push a `main`. Los cambios de datos o de enlaces de fotos en Google Sheets se consultan desde el navegador y no necesitan un nuevo despliegue. Localhost sigue disponible para trabajar en `http://127.0.0.1:5173/`.
+
+Publicación verificada el 11 de octubre de 2026: despliegue correcto, 17 presentaciones, búsqueda, perfiles completos, LinkedIn y foto real de Juan Coronado cargada a 800 × 800 píxeles desde la dirección pública. La lectura de Google Sheets funciona desde el dominio de Pages; la alternativa de fotos insertadas con Apps Script continúa pendiente.
