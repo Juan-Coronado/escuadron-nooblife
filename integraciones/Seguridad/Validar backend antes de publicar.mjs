@@ -13,7 +13,8 @@ try {
   const respuesta = await fetch(servicio, { signal: AbortSignal.timeout(15000), credentials: 'omit', cache: 'no-store' })
   if (!respuesta.ok) throw new Error('API no disponible')
   const datos = await respuesta.json()
-  if (datos?.version !== 1 || datos?.estado !== 'ok' || !Array.isArray(datos.personas)) throw new Error('Contrato inválido')
+  if (datos?.version !== 1 || datos?.estado !== 'ok' || !Array.isArray(datos.personas)
+    || Object.keys(datos).length !== 3) throw new Error('Contrato inválido')
   if (datos.personas.some(persona => !persona || typeof persona !== 'object'
     || Object.keys(persona).length !== campos.length
     || campos.some(campo => typeof persona[campo] !== 'string'))) {
