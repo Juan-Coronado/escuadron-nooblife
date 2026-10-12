@@ -20,6 +20,7 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm run lint
       - run: npm run build
+      - run: npm run test:seguridad
       - run: npm run test:integracion
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e

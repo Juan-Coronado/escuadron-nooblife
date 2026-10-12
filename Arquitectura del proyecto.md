@@ -1,5 +1,7 @@
 # Arquitectura del proyecto
 
+Estado de esta rama: migración al backend preparada, pendiente de acceso y activación en Google. No incorporada a `main` ni desplegada. La web pública conserva su conexión activa hasta verificar la API y completar la restricción de la hoja original. El icono ya se publicó desde `main`.
+
 Web estática de presentación con React, TypeScript y Vite, destinada a GitHub Pages. Los módulos responden a funciones de la página: composición, galería, presentación completa, retrato y datos.
 
 ## Estructura actual
@@ -17,7 +19,7 @@ Web estática de presentación con React, TypeScript y Vite, destinada a GitHub 
 | `src/datos/Foto de persona.ts` | Resolver enlaces públicos de archivos de Drive, validar imágenes HTTPS y rutas locales compatibles con Pages. |
 | `src/datos/Personas.ts` | Modelo y lista de los 17 registros originales seleccionados. |
 | `src/datos/Presentacion de persona.ts` | Nombre, iniciales, orden español, validación de correo y LinkedIn y normalización de búsqueda. |
-| `src/datos/Consulta de personas.ts` | Elegir la fuente configurada, consultar los once campos, validar respuestas e identificar personas. |
+| `src/datos/Consulta de personas.ts` | Consultar exclusivamente la API configurada, validar sus once campos públicos e identificar personas. |
 | `public/Configuracion de datos.json` | URL pública del servicio de Apps Script; vacía hasta activar la integración. |
 | `integraciones/Google Sheets/` | Servicio para leer imágenes en celdas, instrucciones y pruebas de su contrato. |
 | `src/hooks/Usar personas actualizadas.ts` | Consulta al entrar y cada minuto, reanudación, cancelación, respaldo y conservación de datos válidos. |
@@ -35,9 +37,11 @@ La composición de página usa un contenedor adaptable de hasta 1920 píxeles y 
 
 Cada persona tiene nueve campos originales como texto: nombres, apellidos, apodos, correo, institución, carreras, habilidades, hobbies y metas. Esto conserva las respuestas originales, sus comas, signos y campos vacíos. La identidad de sesión deriva de nombre, apellido y correo, con un sufijo para duplicados; no depende de la posición de la fila. Una edición de los campos de identidad crea una entrada nueva. Los dos Joseph se distinguen por apellido. La foto, LinkedIn y la descripción corta son opcionales.
 
-La recopilación completa de Google Sheets permanece fuera del proyecto. La consulta pública selecciona únicamente B, C, D, H, I, K, L, N, O, P y Q de la pestaña 709021814. No se usan credenciales en el navegador. La copia original de los nueve campos funciona como respaldo inicial. Las columnas Foto y Link de linkedin pueden tener celdas vacías, pero sus encabezados deben existir en la fuente.
+La recopilación completa de Google Sheets permanece fuera del proyecto. Apps Script lee únicamente B, C, D, H, I, K, L, N, O, P y Q. El identificador de la hoja y de la pestaña se configuran en las propiedades privadas del script. El frontend no conoce la hoja ni contiene un cliente gviz; recibe únicamente los once campos de la API. No se usan credenciales en el navegador. La copia original de los nueve campos públicos funciona como respaldo inicial. Las columnas Foto y Link de linkedin pueden tener celdas vacías, pero sus encabezados deben existir en la fuente y se validan en el backend.
 
 Para las fotos insertadas en celdas, el servicio de Apps Script devuelve un objeto JSON versionado con los once campos por fila, incluido LinkedIn. Lee únicamente las columnas autorizadas, valida encabezados y convierte los valores `CellImage` con `getContentUrl()` en cada solicitud. No almacena enlaces temporales ni modifica el libro. Su activación permanece pendiente de acceso y autorización en Google. Antes de implementarlo, el responsable debe utilizar la versión local actualizada. El cliente solo acepta una URL de implementación HTTPS de `script.google.com` y valida el contrato antes de reemplazar los datos. No ejecuta código remoto.
+
+El mismo servicio entrega las URLs de fotos de Drive. Rechaza parámetros de consulta y una configuración incompleta antes de abrir la hoja; un visitante no puede seleccionar otro archivo o columna. El cliente no vuelve a Google Sheets ante un error ni con una URL vacía. La dirección de la API y los campos destinados a mostrarse son públicos. Para proteger las otras columnas, el responsable debe restringir la hoja original conservando el acceso de los integrantes, y detener cualquier publicación en la Web. Esto sigue pendiente; cambiar el código no altera los permisos de Google.
 
 El hook consulta cada 60 segundos si la página está visible y al volver a ella o recuperar la conexión. Evita consultas simultáneas, cancela al desmontar y limita cada petición a 15 segundos. Los errores conservan la última lista válida; los encabezados incorrectos se rechazan antes de cambiar la galería. Una hoja válida sin filas produce el estado vacío. No hay caché persistente de datos personales en el navegador.
 
@@ -61,12 +65,14 @@ Los nombres visibles y los nombres propios de archivos o carpetas con varias pal
 
 ## Validación
 
-`npm run check` ejecuta lint, tipos, compilación, dos pruebas del servicio con un entorno simulado y 30 pruebas de navegador: diez casos en cada tamaño de escritorio, tablet y móvil. Incluyen búsqueda, navegación, fidelidad de datos y recursos, control del diálogo, orden alfabético, altas y bajas, recuperación de la hoja y actualización del perfil sin perder el foco. También verifican hobbies y metas dentro del perfil, fotos por persona, renovación, error y eliminación del retrato, así como asociación, actualización, retirada y validación de LinkedIn. El caso de Drive comprueba archivos por fila, conservación de la clave de acceso, renovación en el perfil abierto y rechazo de carpetas. Las consultas se interceptan con respuestas controladas; la lectura pública y el servicio real se verifican aparte.
+Esta rama supera lint, tipos y compilación, una comprobación del JavaScript publicado sin identificador de hoja ni direcciones gviz, cuatro pruebas del servicio y 33 pruebas de navegador. Los casos nuevos verifican que una configuración vacía, inválida o una API fallida nunca reconectan directamente a Sheets, que las propiedades del servidor son obligatorias y que los parámetros no pueden ampliar la lectura. Las pruebas del backend siguen siendo simuladas hasta activar y verificar el servicio real.
+
+`npm run check` ejecuta lint, tipos, compilación, una comprobación de seguridad, cuatro pruebas del servicio con un entorno simulado y 33 pruebas de navegador: once casos en cada tamaño de escritorio, tablet y móvil. Incluyen búsqueda, navegación, fidelidad de datos y recursos, control del diálogo, orden alfabético, altas y bajas, recuperación de la hoja y actualización del perfil sin perder el foco. También verifican hobbies y metas dentro del perfil, fotos por persona, renovación, error y eliminación del retrato, así como asociación, actualización, retirada y validación de LinkedIn. El caso de Drive comprueba archivos por fila, conservación de la clave de acceso, renovación en el perfil abierto y rechazo de carpetas. Las consultas se interceptan con respuestas controladas; la lectura pública y el servicio real se verifican aparte.
 
 El servidor de desarrollo sigue en `http://127.0.0.1:5173/` y actualiza la vista al guardar. Los archivos de trabajo, capturas, informes y copias previas permanecen fuera de la publicación mediante `.gitignore`.
 
 ## Publicación
 
-La web está publicada en [GitHub Pages](https://juan-coronado.github.io/escuadron-nooblife/) desde [Juan-Coronado/escuadron-nooblife](https://github.com/Juan-Coronado/escuadron-nooblife), rama `main`. El flujo utiliza Node.js 24, versiones fijadas de las acciones y permisos de escritura de Pages limitados al trabajo de despliegue. Publica únicamente `dist/` después de superar lint, tipos, compilación y las 32 pruebas. No necesita un servidor local ni claves en el navegador.
+La web está publicada en [GitHub Pages](https://juan-coronado.github.io/escuadron-nooblife/) desde [Juan-Coronado/escuadron-nooblife](https://github.com/Juan-Coronado/escuadron-nooblife), rama `main`. El flujo utiliza Node.js 24, versiones fijadas de las acciones y permisos de escritura de Pages limitados al trabajo de despliegue. Publica únicamente `dist/` después de superar lint, tipos, compilación y las 38 comprobaciones. No necesita un servidor local ni claves en el navegador.
 
 El 11 de octubre de 2026 se verificaron el despliegue, los 17 perfiles y la lectura real de Google Sheets desde el dominio público, incluida la foto de Juan Coronado a 800 × 800 píxeles. Las actualizaciones de datos conservan el intervalo de 60 segundos y no requieren commits. Los cambios del código se publican con push a `main`.

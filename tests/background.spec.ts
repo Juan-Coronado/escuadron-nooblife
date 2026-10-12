@@ -1,10 +1,10 @@
 import { expect, test } from '@playwright/test'
 import { personas } from '../src/datos/Personas'
-import { respuestaDeHoja, rutaDeHoja } from './Respuesta de hoja'
+import { configurarServicio, respuestaDelServicio, rutaDelServicio } from './Respuesta del servicio'
 
 test.beforeEach(async ({ page }) => {
-  await page.route(rutaDeHoja, route => route.fulfill({
-    contentType: 'application/javascript', body: respuestaDeHoja(personas),
+  await page.route(rutaDelServicio, route => route.fulfill({
+    contentType: 'application/json', body: respuestaDelServicio(personas),
   }))
 })
 
@@ -18,6 +18,7 @@ test('all people and the original background load at the GitHub Pages path', asy
     if (response.status() >= 400) errors.push(`${response.status()} ${response.url()}`)
   })
 
+  await configurarServicio(page)
   await page.goto('/prueba-pages/')
   await expect(page).toHaveTitle('Escuadrón Nooblife')
   await expect(page.getByRole('heading', { name: 'Escuadrón Nooblife', exact: true })).toBeVisible()
@@ -47,6 +48,7 @@ test('all people and the original background load at the GitHub Pages path', asy
 })
 
 test('complete profiles preserve data, contain keyboard focus and return it on close', async ({ page }) => {
+  await configurarServicio(page)
   await page.goto('/prueba-pages/')
   const trigger = page.getByRole('button', { name: 'Ver perfil de Joseph Ccana', exact: true })
   await trigger.focus()
@@ -90,6 +92,7 @@ test('complete profiles preserve data, contain keyboard focus and return it on c
 })
 
 test('search finds names without accents, nicknames and studies and recovers from empty results', async ({ page }) => {
+  await configurarServicio(page)
   await page.goto('/prueba-pages/')
   const search = page.getByRole('searchbox', { name: 'Encuentra a alguien' })
   await search.fill('ramon')
@@ -112,6 +115,7 @@ test('search finds names without accents, nicknames and studies and recovers fro
 })
 
 test('navigation reaches the group and clearing search restores all people and focus', async ({ page }) => {
+  await configurarServicio(page)
   await page.goto('/prueba-pages/')
   await page.getByRole('link', { name: 'Conoce al grupo', exact: true }).click()
   await expect(page).toHaveURL(/#grupo$/)

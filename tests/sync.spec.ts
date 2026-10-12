@@ -1,15 +1,16 @@
 import { expect, test } from '@playwright/test'
 import { personas } from '../src/datos/Personas'
-import { respuestaDeHoja, rutaDeHoja } from './Respuesta de hoja'
+import { configurarServicio, respuestaDelServicio, rutaDelServicio } from './Respuesta del servicio'
 
 test('live updates keep alphabetical order, refresh the open profile and preserve search and focus', async ({ page }) => {
   await page.clock.install()
   let registros = [...personas]
-  await page.route(rutaDeHoja, route => {
-    const consulta = new URL(route.request().url()).searchParams.get('tq')
-    expect(consulta).toBe('select B, C, D, H, I, K, L, N, O, P, Q')
-    return route.fulfill({ contentType: 'application/javascript', body: respuestaDeHoja(registros) })
+  await page.route(rutaDelServicio, route => {
+    expect(route.request().method()).toBe('GET')
+    expect(new URL(route.request().url()).search).toBe('')
+    return route.fulfill({ contentType: 'application/json', body: respuestaDelServicio(registros) })
   })
+  await configurarServicio(page)
   await page.goto('/prueba-pages/')
   await expect(page.getByRole('article').first()).toHaveAccessibleName('Presentación de Andre Mestanza')
   await expect(page.getByRole('article').last()).toHaveAccessibleName('Presentación de Sergio Ayuque')
@@ -37,21 +38,22 @@ test('live updates keep alphabetical order, refresh the open profile and preserv
   await expect(page.getByRole('article')).toHaveCount(17)
 })
 
-test('a failed or invalid sheet keeps the last valid data and recovers on the next refresh', async ({ page }) => {
+test('a failed or invalid API keeps the last valid data and recovers on the next refresh', async ({ page }) => {
   await page.clock.install()
   let contenido = '<html>No disponible</html>'
-  await page.route(rutaDeHoja, route => route.fulfill({ contentType: 'application/javascript', body: contenido }))
+  await page.route(rutaDelServicio, route => route.fulfill({ contentType: 'application/json', body: contenido }))
+  await configurarServicio(page)
   await page.goto('/prueba-pages/')
   await expect(page.getByText('No pudimos actualizar los datos. Mostramos la última información disponible.', { exact: true })).toBeVisible()
   await expect(page.getByRole('article')).toHaveCount(17)
 
   const registros = personas.map(persona => persona.nombres === 'Marco' ? { ...persona, apodos: 'Apodo actualizado' } : persona)
-  contenido = respuestaDeHoja(registros)
+  contenido = respuestaDelServicio(registros)
   await page.clock.fastForward(60000)
   await expect(page.getByText('Apodo actualizado', { exact: true })).toBeVisible()
   await expect(page.getByText('No pudimos actualizar los datos. Mostramos la última información disponible.', { exact: true })).toHaveCount(0)
 
-  contenido = respuestaDeHoja(personas).replace('Universidades / Institutos', 'Columna incorrecta')
+  contenido = respuestaDelServicio(personas).replace('"institucion":', '"campoIncorrecto":')
   await page.clock.fastForward(60000)
   await expect(page.getByText('No pudimos actualizar los datos. Mostramos la última información disponible.', { exact: true })).toBeVisible()
   await expect(page.getByText('Apodo actualizado', { exact: true })).toBeVisible()

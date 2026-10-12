@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 import { personas } from '../src/datos/Personas'
-import { respuestaDeHoja, rutaDeHoja } from './Respuesta de hoja'
+import { configurarServicio, respuestaDelServicio, rutaDelServicio } from './Respuesta del servicio'
 
 const servicio = 'https://script.google.com/macros/s/pruebaNooblife/exec'
 // Imagen mínima exclusivamente para comprobar carga, errores y asociación en las pruebas.
@@ -19,6 +19,7 @@ test('cell image photos follow the correct person and refresh in the gallery and
     if (falloDeFoto && route.request().url().endsWith('Rota')) return route.fulfill({ status: 404, body: '' })
     return route.fulfill({ contentType: 'image/png', body: imagen })
   })
+  await configurarServicio(page)
   await page.goto('/prueba-pages/')
   const search = page.getByRole('searchbox', { name: 'Encuentra a alguien' })
   await search.fill('Joseph')
@@ -70,7 +71,8 @@ test('local profile photos work below the Pages path and invalid protocols keep 
   const registros = personas.map(persona => persona.nombres === 'Andre' ? {
     ...persona, foto: 'images/fondo-textura.png',
   } : persona.nombres === 'Celeste' ? { ...persona, foto: 'javascript:alert(1)' } : persona)
-  await page.route(rutaDeHoja, route => route.fulfill({ contentType: 'application/javascript', body: respuestaDeHoja(registros) }))
+  await page.route(rutaDelServicio, route => route.fulfill({ contentType: 'application/json', body: respuestaDelServicio(registros) }))
+  await configurarServicio(page)
   await page.goto('/prueba-pages/')
   const andre = page.getByRole('article', { name: 'Presentación de Andre Mestanza', exact: true })
   await andre.scrollIntoViewIfNeeded()
@@ -88,8 +90,9 @@ test('public Drive file links load for the correct person and folder links keep 
   } : persona.apellidos === 'Quispe' ? {
     ...persona, foto: 'https://drive.google.com/drive/folders/carpetaDeQuispePrueba',
   } : persona)
-  await page.route(rutaDeHoja, route => route.fulfill({ contentType: 'application/javascript', body: respuestaDeHoja(registros) }))
+  await page.route(rutaDelServicio, route => route.fulfill({ contentType: 'application/json', body: respuestaDelServicio(registros) }))
   await page.route('https://drive.google.com/thumbnail?*', route => route.fulfill({ contentType: 'image/png', body: imagen }))
+  await configurarServicio(page)
   await page.goto('/prueba-pages/')
   await page.getByRole('searchbox', { name: 'Encuentra a alguien' }).fill('Joseph')
   const ccana = page.getByRole('article', { name: 'Presentación de Joseph Ccana', exact: true })

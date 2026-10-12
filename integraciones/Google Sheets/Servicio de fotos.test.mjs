@@ -5,8 +5,10 @@ import vm from 'node:vm'
 
 const codigo = readFileSync(new URL('./Fotos y presentaciones.gs', import.meta.url), 'utf8')
 
-function prepararServicio() {
+function prepararServicio(configuracion = {}) {
   let lecturaDeFoto = 0
+  let lecturasDeHoja = 0
+  const propiedades = { idDeLaHoja: 'hojaPrivadaDePrueba', idDeLaPestana: '709021814', ...configuracion }
   const columnasPermitidas = [2, 3, 4, 8, 9, 11, 12, 14, 15, 16, 17]
   const filas = [
     ['datoNoAutorizado', 'Nombres', 'Apellidos', 'Apodos', '', '', '', 'Correo', 'Universidades / Institutos', '', 'Carrera(s)', 'Habilidades', '', 'Hobbies', 'Metas', 'Foto ', 'Link de linkedin'],
@@ -30,10 +32,12 @@ function prepararServicio() {
     },
   }
   const contexto = vm.createContext({
+    PropertiesService: { getScriptProperties: () => ({ getProperty: nombre => propiedades[nombre] ?? null }) },
     SpreadsheetApp: {
       ValueType: { IMAGE: 'IMAGE' },
       openById: id => {
-        assert.equal(id, '1wdpvPkIsyjZUyDQefSE-yTGMmAqqHGuz7A5dxy4M8rs')
+        lecturasDeHoja += 1
+        assert.equal(id, 'hojaPrivadaDePrueba')
         return { getSheets: () => [hoja] }
       },
     },
@@ -47,7 +51,7 @@ function prepararServicio() {
     console: { error: () => {} },
   })
   vm.runInContext(codigo, contexto)
-  return { filas, consultar: () => JSON.parse(contexto.doGet()) }
+  return { filas, consultar: peticion => JSON.parse(contexto.doGet(peticion)), lecturas: () => lecturasDeHoja }
 }
 
 test('serves only approved fields and renews inserted cell photos without mixing people', () => {
@@ -78,4 +82,20 @@ test('rejects renamed columns without exposing errors and accepts an empty sheet
   filas[0][15] = 'Foto'
   filas.splice(1)
   assert.deepEqual(consultar(), { version: 1, estado: 'ok', personas: [] })
+})
+
+test('missing or invalid server configuration fails before accessing any sheet', () => {
+  for (const configuracion of [{ idDeLaHoja: null }, { idDeLaHoja: 'https://otra-hoja.test/' }, { idDeLaPestana: null }, { idDeLaPestana: 'otro' }]) {
+    const servicio = prepararServicio(configuracion)
+    assert.deepEqual(servicio.consultar(), { version: 1, estado: 'error' })
+    assert.equal(servicio.lecturas(), 0)
+  }
+})
+
+test('query parameters cannot select other files or columns', () => {
+  const servicio = prepararServicio()
+  assert.deepEqual(servicio.consultar({ parameter: { idDeLaHoja: 'otraHojaDePrueba', tq: 'select *' } }), { version: 1, estado: 'error' })
+  assert.equal(servicio.lecturas(), 0)
+  assert.equal(servicio.consultar({ parameter: {} }).estado, 'ok')
+  assert.equal(servicio.lecturas(), 1)
 })

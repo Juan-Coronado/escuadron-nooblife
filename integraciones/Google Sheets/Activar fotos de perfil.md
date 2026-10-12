@@ -4,6 +4,8 @@ La web ya contiene la conexión y el servicio está guardado en el proyecto [Esc
 
 ## Activación inicial
 
+Para esta rama, seguir primero [Mover la conexión al backend](<Mover la conexion al backend.md>): configurar `idDeLaHoja` e `idDeLaPestana` en las propiedades privadas del script, activar el servicio y restringir la hoja original. Las imágenes insertadas son opcionales; el mismo backend sirve los enlaces HTTPS de Drive.
+
 1. Abrir el proyecto indicado, vinculado a la hoja de presentaciones. Antes de implementarlo, reemplazar el contenido de Código.gs con la versión actual de `Fotos y presentaciones.gs` de esta carpeta; incluye la columna Link de linkedin (Q).
 2. En **Implementar → Nueva implementación**, elegir **Aplicación web**.
 3. Configurar **Ejecutar como: Yo** y **Quién tiene acceso: Cualquier usuario**, para permitir la lectura desde localhost y GitHub Pages.
