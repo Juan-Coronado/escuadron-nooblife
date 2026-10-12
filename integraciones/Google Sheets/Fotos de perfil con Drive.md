@@ -18,7 +18,7 @@ Para cambiar de foto y mantener un archivo de las anteriores, subir otra imagen 
 
 La vista pública de imagen de Drive se comprobó en un navegador sin sesión con la foto existente dentro de Juan Coronado. Es una integración con la vista pública de Drive, no una garantía de disponibilidad de un servicio dedicado a imágenes: si el archivo se vuelve privado, se elimina o deja de responder como imagen, el retrato conserva las iniciales. No se almacenan enlaces temporales de `thumbnailLink` de la API.
 
-Este flujo utiliza la consulta pública de la hoja y no necesita activar el Apps Script pendiente. No recorre carpetas ni elige una foto entre varias. El responsable de la fila elige la imagen al pegar su enlace.
+En esta rama los enlaces de Foto se obtienen de la API del backend. Requiere completar la activación descrita en [Mover la conexión al backend](<Mover la conexion al backend.md>), pendiente de acceso de Google. No recorre carpetas ni elige una foto entre varias. El responsable de la fila elige la imagen al pegar su enlace; la migración no cambia cómo se suben las fotos ni los permisos de Drive.
 
 ## Estado verificado el 11 de octubre de 2026
 

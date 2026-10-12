@@ -1,7 +1,6 @@
 // Servicio de solo lectura para la web Escuadrón Nooblife.
-// Insertar cada retrato dentro de la celda Foto, en la fila de su persona.
-const idDeLaHojaNooblife = '1wdpvPkIsyjZUyDQefSE-yTGMmAqqHGuz7A5dxy4M8rs';
-const idDeLaPestanaNooblife = 709021814;
+// Configurar idDeLaHoja e idDeLaPestana en Propiedades del script de Apps Script.
+// Acepta enlaces HTTPS de Foto y, opcionalmente, imágenes insertadas en las celdas.
 const camposDeNooblife = [
   { columna: 2, titulo: 'Nombres', campo: 'nombres' },
   { columna: 3, titulo: 'Apellidos', campo: 'apellidos' },
@@ -16,8 +15,11 @@ const camposDeNooblife = [
   { columna: 17, titulo: 'Link de linkedin', campo: 'linkedin' },
 ];
 
-function doGet() {
+function doGet(peticion) {
   try {
+    if (peticion && Object.keys(peticion.parameter || {}).length) {
+      throw new Error('El servicio no admite parámetros de consulta.');
+    }
     return respuestaNooblife({ version: 1, estado: 'ok', personas: leerPresentacionesNooblife() });
   } catch (error) {
     console.error(error);
@@ -30,8 +32,15 @@ function respuestaNooblife(datos) {
 }
 
 function leerPresentacionesNooblife() {
-  const libro = SpreadsheetApp.openById(idDeLaHojaNooblife);
-  const hoja = libro.getSheets().find(pestana => pestana.getSheetId() === idDeLaPestanaNooblife);
+  const propiedades = PropertiesService.getScriptProperties();
+  const idDeLaHoja = propiedades.getProperty('idDeLaHoja');
+  const idDeLaPestana = propiedades.getProperty('idDeLaPestana');
+  if (!idDeLaHoja || !/^[A-Za-z0-9_-]{10,}$/.test(idDeLaHoja)
+    || idDeLaPestana === null || !/^\d+$/.test(idDeLaPestana) || !Number.isSafeInteger(Number(idDeLaPestana))) {
+    throw new Error('Falta configurar la hoja de presentaciones.');
+  }
+  const libro = SpreadsheetApp.openById(idDeLaHoja);
+  const hoja = libro.getSheets().find(pestana => pestana.getSheetId() === Number(idDeLaPestana));
   if (!hoja) throw new Error('No se encontró la pestaña de presentaciones.');
   const filas = Math.max(hoja.getLastRow(), 1);
   const columnas = camposDeNooblife.map(campo => {

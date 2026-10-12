@@ -1,13 +1,14 @@
 import { expect, test } from '@playwright/test'
 import { personas } from '../src/datos/Personas'
-import { respuestaDeHoja, rutaDeHoja } from './Respuesta de hoja'
+import { configurarServicio, respuestaDelServicio, rutaDelServicio } from './Respuesta del servicio'
 
 test('gallery keeps basic identity and LinkedIn follows its person through updates in the full profile', async ({ page }) => {
   await page.clock.install()
   let registros = personas.map(persona => persona.apellidos === 'Ccana' ? {
     ...persona, linkedin: 'https://www.linkedin.com/in/prueba-ccana/?isSelfProfile=true',
   } : persona.apellidos === 'Quispe' ? { ...persona, linkedin: 'https://www.linkedin.com.ejemplo.test/in/otro/' } : persona)
-  await page.route(rutaDeHoja, route => route.fulfill({ contentType: 'application/javascript', body: respuestaDeHoja(registros) }))
+  await page.route(rutaDelServicio, route => route.fulfill({ contentType: 'application/json', body: respuestaDelServicio(registros) }))
+  await configurarServicio(page)
   await page.goto('/prueba-pages/')
   const search = page.getByRole('searchbox', { name: 'Encuentra a alguien' })
   await search.fill('Joseph')

@@ -14,7 +14,9 @@
     "preview": "vite preview --host 127.0.0.1",
     "test:e2e": "playwright test",
     "test:integracion": "node --test \"integraciones/Google Sheets/Servicio de fotos.test.mjs\"",
-    "check": "npm run lint && npm run build && npm run test:integracion && npm run test:e2e"
+    "test:seguridad": "node --test \"integraciones/Seguridad/Compilacion sin acceso a la hoja.test.mjs\"",
+    "validar:publicacion": "node \"integraciones/Seguridad/Validar backend antes de publicar.mjs\"",
+    "check": "npm run lint && npm run build && npm run test:seguridad && npm run test:integracion && npm run test:e2e"
   },
   "dependencies": {
     "@phosphor-icons/react": "2.1.10",
