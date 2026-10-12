@@ -63,6 +63,8 @@ Ejecuta lint, TypeScript, compilación, dos pruebas del servicio de Apps Script 
 
 ## Recursos visuales
 
+`public/images/Icono de Escuadron Nooblife.png`: imagen original entregada por el usuario para el icono de la pestaña. `index.html` utiliza una ruta relativa compatible con GitHub Pages; el archivo se conserva sin edición.
+
 `public/images/fondo-textura.png`: PNG original de 1536 × 1024 píxeles, sin compresión adicional. `object-fit: cover` conserva las proporciones y recorta el encuadre según la pantalla. Una capa CSS ayuda a leer sobre la textura; el archivo permanece intacto.
 
 `public/images/Portada Escuadron Nooblife.png`: portada original de 2170 × 725 píxeles entregada por el usuario. Se conserva como fuente original y no se utiliza como fondo de la cabecera.
