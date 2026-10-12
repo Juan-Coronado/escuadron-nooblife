@@ -16,12 +16,14 @@ El servicio no acepta parámetros de consulta, no escribe en la hoja y no permit
 4. Abrir la URL `/exec` sin iniciar sesión y verificar `version: 1`, `estado: "ok"`, 17 registros actuales y únicamente nombres, apellidos, apodos, correo, institución, carreras, habilidades, hobbies, metas, foto y LinkedIn. Verificar la foto real de Juan Coronado. No basta con que las pruebas simuladas pasen.
 5. El responsable restringe el acceso público de la hoja original, conservando acceso individual de los integrantes que la editan. Si la hoja está publicada en la Web, detener también esa publicación. Este paso afecta a la hoja, no a la carpeta de fotos de Drive, cuyos permisos se conservan.
 6. Comprobar que la hoja ya no admite consultas sin autenticación y que la API sigue devolviendo los datos aprobados. No cerrar el acceso antes de comprobar que el responsable del backend puede leerla.
-7. Colocar la URL real `/exec` en `public/Configuracion de datos.json`, campo `servicioDeFotos`. Ejecutar `npm run check` y verificar la API real desde el navegador.
+7. Colocar la URL real `/exec` en `public/Configuracion de datos.json`, campo `servicioDeFotos`. Ejecutar `npm run check` y `npm run validar:publicacion`, y verificar la API real desde el navegador.
 8. Incorporar la rama a `main` y comprobar el despliegue en GitHub Pages. Verificar búsqueda, perfiles, LinkedIn y fotos. Cambiar un dato en una fila y comprobar la siguiente actualización; no hace falta desplegar por cada edición de la hoja.
 
 ## Qué se ha verificado
 
 La compilación de esta rama no contiene el identificador de Google Sheets ni una dirección gviz. Las pruebas comprueban configuración vacía o inválida, fallo y recuperación de la API sin acceso directo a la hoja, lectura exclusiva de columnas permitidas, configuración privada obligatoria, rechazo de parámetros, renovación de fotos y actualización cada 60 segundos sin perder la búsqueda o el perfil abierto.
+
+El flujo de GitHub Actions detiene el despliegue si falta la configuración o si la API real no responde con el contrato esperado y únicamente los once campos permitidos. Este control verifica la respuesta pública del backend; el cierre del acceso público de la hoja original sigue siendo un paso que debe realizar y comprobar su responsable.
 
 La copia original de los campos seleccionados permanece como respaldo inicial en la web. Es contenido público de presentación, no una copia de las columnas privadas de la hoja. Las autorizaciones, los permisos reales y el servicio remoto están pendientes; todavía no se afirma que la hoja esté protegida.
 
